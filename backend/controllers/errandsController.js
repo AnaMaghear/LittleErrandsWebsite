@@ -1,5 +1,7 @@
 const asyncHandler = require("express-async-handler");
 
+
+const Errnads = require("../models/errandsModel")
 const getErrands = asyncHandler(async (req, res) => {
     res.status(200).json({message: "Get goal"});
 });
