@@ -24,7 +24,26 @@ const getConfirmationByErrand = asyncHandler(async (req, res) => {
 
 const setConfirmation = asyncHandler(async(req, res) => {
     // verify errand is not mine
+    const errand = await Errands.findById(req.body.errandId)
+
+    if (!errand) {
+        res.status(400)
+        throw new Error("Errand doesn't exist")
+    }
+
+    if (errand.user.toString() === req.user.id) {
+        res.status(400)
+        throw new Error("Cannot ask to complete your own errand")
+    }
+
     // verify this is my first confirmation for this errand
+    const confirmations = await Confirmation.find({ errand: req.body.errandId })
+    confirmations.forEach(c => {
+        if (c.solver.toString() === req.user.id) {
+            res.status(400)
+            throw new Error("You've already applied for this errand")
+        }
+    })
 
     if(!req.body.errandId){
         res.status(400);
@@ -38,7 +57,6 @@ const setConfirmation = asyncHandler(async(req, res) => {
     })
     res.status(200).json(confirmation);
 });
-
 
 const updateConfirmation = asyncHandler(async(req,res) => {
     const confirmation = await Confirmation.findById(req.params.id)

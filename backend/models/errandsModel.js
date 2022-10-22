@@ -19,6 +19,11 @@ const errandsSchema = mongoose.Schema({
         require: [true, 'Please add a description value']
     },
 
+    location: {
+        type: String,
+        require: [true, 'Please add a location value']
+    },
+
     reward: {
         type: Number,
         require: [true, "Please add a reward value"]
