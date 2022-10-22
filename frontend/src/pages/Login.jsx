@@ -1,12 +1,38 @@
 import {useState, useEffect } from 'react'
 import {FaSignInAlt} from 'react-icons/fa'
+import {useSelector, useDispatch} from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import {toast} from 'react-toastify'
+import {login, reset} from '../features/auth/authSlice'
+import Spinner from '../components/Spinner'
+
 function Login() {
   const [formData, setFormData] = useState({
-    username : '',
-    password1: '',
+    username: '',
+    password: '',
   })
 
-  const {username, password1} = formData
+  const {username, password} = formData
+
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const {user, isLoading, isError, isSuccess, message} = useSelector(
+    (state) => state.auth) 
+
+  
+    useEffect (() =>{
+      if(isError){
+        toast.error(message)
+      }
+    
+      if(isSuccess || user){
+        navigate('/')
+      }
+    
+      dispatch(reset)
+    
+    }, [user, isError, isSuccess, message, navigate, dispatch])
 
 const onChange = (e) => {
   setFormData((prevState) => ({
@@ -17,16 +43,28 @@ const onChange = (e) => {
 
 const onSubmit = (e) => {
   e.preventDefault()
+
+  const userData = {
+    username,
+    password
+  }
+
+  dispatch(login(userData))
+}
+
+
+if(isLoading){
+  return (<Spinner/>)
 }
 
   return (
     <>
-      <selection className="heading" >
+      <section className="heading" >
         <h1>
           <FaSignInAlt /> Login
         </h1>
         <p> Please sign in to your account</p>
-      </selection>
+      </section>
 
       <section className = "form">
         <form onSubmit = {onSubmit}>
@@ -46,15 +84,15 @@ const onSubmit = (e) => {
             <input
               type = "password" 
               className = "form-control" 
-              id =  "password1" 
-              name = 'password1' 
-              value = {password1} 
+              id =  "password" 
+              name = 'password' 
+              value = {password} 
               placeholder = "Enter your password"
               onChange = {onChange}
             /> 
           </div>
           
-          <div classNmae = "form-group">
+          <div className = "form-group">
               <button type = "submit" className='btn btn-block'>Submit </button>
           </div>
           

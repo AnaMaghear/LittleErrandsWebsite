@@ -1,17 +1,42 @@
 import {useState, useEffect, } from 'react'
+import {useSelector, useDispatch} from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import {toast} from 'react-toastify'
 import {FaUser} from 'react-icons/fa'
+import {register, reset} from '../features/auth/authSlice'
+import Spinner from '../components/Spinner'
+
 function Register() {
   const [formData, setFormData] = useState({
     fullname : '',
     username : '',
     email: '',
     phoneNumber: '',
-    password1: '',
+    password: '',
     password2: ''
   })
 
-  const {fullname, username, email, phoneNumber, password1, password2} = formData
+  const {fullname, username, email, phoneNumber, password, password2} = formData
 
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const {user, isLoading, isError, isSuccess, message} = useSelector(
+    (state) => state.auth) 
+
+
+useEffect (() =>{
+  if(isError){
+    toast.error(message)
+  }
+
+  if(isSuccess || user){
+    navigate('/')
+  }
+
+  dispatch(reset)
+
+}, [user, isError, isSuccess, message, navigate, dispatch])
 
 const onChange = (e) => {
     setFormData((prevState) => ({
@@ -22,16 +47,33 @@ const onChange = (e) => {
 
 const onSubmit = (e) => {
   e.preventDefault()
+
+  if(password !== password2){
+    toast.error('Passwords do not match')
+  }else{
+    const userData = {
+      fullname, 
+      username,
+      email,
+      phoneNumber,
+      password
+    }
+    dispatch(register(userData))
+  }
+}
+
+if(isLoading){
+  return <Spinner />
 }
 
   return (
     <>
-      <selection className="heading" >
+      <section className="heading" >
         <h1>
           <FaUser /> Register
         </h1>
         <p> Please create an account</p>
-      </selection>
+      </section>
 
       <section className = "form">
         <form onSubmit = {onSubmit}>
@@ -83,9 +125,9 @@ const onSubmit = (e) => {
             <input
               type = "password" 
               className = "form-control" 
-              id =  "password1" 
-              name = 'password1' 
-              value = {password1} 
+              id =  "password" 
+              name = 'password' 
+              value = {password} 
               placeholder = "Enter your password"
               onChange = {onChange}
             /> 
@@ -102,7 +144,7 @@ const onSubmit = (e) => {
             /> 
           </div>
           <div>
-            <div classNmae = "form-group">
+            <div className = "form-group">
               <button type = "submit" className='btn btn-block'>Submit </button>
             </div>
           </div>
