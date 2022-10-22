@@ -1,30 +1,45 @@
 const asyncHandler = require("express-async-handler"); 
-const Errnads = require("../models/errandsModel")
+const ErrandStatus = require("../enums/errandStatusEnum");
+const Errands = require("../models/errandsModel")
 const User = require("../models/userModel")
+
 const getErrands = asyncHandler(async (req, res) => {
-    const errands = await Errnads.find({ user: req.user.id})
+    const errands = await Errands.find({ user: req.user.id})
     res.status(200).json(errands)
 });
 
 const setErrands = asyncHandler(async(req, res) => {
-    if(!req.body.text){
+    if(!req.body.title){
         res.status(400);
-        throw new Error("Please add a text field")
+        throw new Error("Please add a title field")
     }
 
-    const errands = await Errnads.create({
-        text: req.body.text,
-        user: req.user.id
+    if(!req.body.description){
+        res.status(400);
+        throw new Error("Please add a description field")
+    }
+
+    if(!req.body.reward){
+        res.status(400);
+        throw new Error("Please add a reward field")
+    }
+
+    const errands = await Errands.create({
+        user: req.user.id,
+        title: req.body.title,
+        description: req.body.description,
+        reward: req.body.reward,
+        status: ErrandStatus.New
     })
     res.status(200).json(errands);
 });
 
 const updateErrands = asyncHandler(async (req, res) => {
-   const errands = await Errnads.findById(req.params.id)
+   const errands = await Errands.findById(req.params.id)
 
    if(!errands){
     res.status(400)
-    throw new Error("Goal not found")
+    throw new Error("Errand not found")
    }
 
    //Check for user
@@ -38,17 +53,21 @@ const updateErrands = asyncHandler(async (req, res) => {
     res.status(401)
     throw new Error('User not authorized')
    }
-   const updateErrand = await Errnads.findById(req.params.id, req.body,{
+
+   const updateErrand = await Errands.findByIdAndUpdate(req.params.id, req.body,{
     new: true,
    })
+
+   res.status(200).json(updateErrand)
 });
 
 const deleteErrands = asyncHandler(async (req, res) => {
-    const errands = await Errnads.findById(req.params.id)
-    if(!errands){
-        res.status(400)
-        throw new Error('Errands not found')
-    }
+    const errands = await Errands.findById(req.params.id)
+
+   if(!errands){
+    res.status(400)
+    throw new Error("Goal not found")
+   }
 
    //Check for user
    if(!req.user){
