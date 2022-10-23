@@ -9,6 +9,7 @@
 body {
   font-family: 'Poppins', sans-serif;
   height: 100vh;
+  background-image: linear-gradient(to right, rgb(193, 225, 193) , rgb(255, 250, 160));
 }
 
 a {
@@ -48,8 +49,28 @@ h3 {
   justify-content: space-between;
   align-items: center;
   padding: 20px 0;
-  border-bottom: 1px solid #e6e6e6;
+  border-bottom: 1px solid #000;
   margin-bottom: 60px;
+}
+
+.header .logo-section {
+  display: flex;
+}
+
+.logo-section .btn {
+  margin-left: 20px;
+}
+
+.header .logo {
+  padding: 10px 20px;
+  border-radius: 2px;
+  border: 1px solid black;
+}
+
+.header .logo:hover {
+  background-color: rgb(255, 255, 96);
+  cursor: pointer;
+  transform: scale(0.98);
 }
 
 .header ul {

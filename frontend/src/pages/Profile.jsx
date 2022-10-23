@@ -1,22 +1,23 @@
-
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
 
-const Dashbord = () => {
+const Profile = () => {
   const navigate = useNavigate()
 
-  const {user} = useSelector((state) => state.auth)
+  const { user } = useSelector((state) => state.auth)
 
   useEffect(() => {
-    if(!user){
+    if (!user) {
       navigate('/login')
     }
   }, [user, navigate])
 
   return (
-    <div>Dashbord</div>
+    <>
+      Te iubesc Pisic din Profile
+    </>
   )
 }
 
-export default Dashbord
+export default Profile
