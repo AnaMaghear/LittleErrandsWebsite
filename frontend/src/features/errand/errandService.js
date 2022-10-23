@@ -26,9 +26,22 @@ const getAllErrands = async (token) => {
     return response.data
 }
 
+const getErrandById = async (id, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
+
+    const response = await axios.get(`${API_URL}${id}`, config)
+
+    return response.data
+}
+
 const errandService = {
     createErrand,
-    getAllErrands
+    getAllErrands,
+    getErrandById
 }
 
 export default errandService
