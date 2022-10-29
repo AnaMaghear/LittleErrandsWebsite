@@ -20,8 +20,8 @@ const getErrandById = asyncHandler(async (req, res) => {
 })
 
 const getAllErrands = asyncHandler(async (req, res) => {
-    const errands = await Errands.find() 
-    res.status(200).json(errands)
+    const errands = await Errands.find()
+    res.status(200).json(errands.sort((e1, e2) => e1.createdAt > e2.createdAt ? -1 : 1))
 })
 
 const setErrands = asyncHandler(async (req, res) => {
