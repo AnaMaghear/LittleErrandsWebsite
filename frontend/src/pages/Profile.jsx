@@ -11,11 +11,12 @@ const Profile = () => {
     if (!user) {
       navigate('/login')
     }
+    
   }, [user, navigate])
 
   return (
     <>
-      Te iubesc Pisic din Profile
+      Hello, { user.fullname }
     </>
   )
 }

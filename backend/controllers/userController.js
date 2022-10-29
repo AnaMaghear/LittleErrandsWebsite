@@ -80,4 +80,14 @@ const getMe = asyncHandler(async(req, res) => {
     res.status(200).json(req.user) 
 })
 
-module.exports = { registerUser, loginUser, getMe}
+const getUserById = asyncHandler(async(req, res) => {
+    const user = await User.findById(req.params.id)
+
+    if (!user) {
+        res.status(400)
+        throw new Error('User does not exist')
+    }
+    res.status(200).json(user)
+})
+
+module.exports = { registerUser, loginUser, getMe, getUserById }
