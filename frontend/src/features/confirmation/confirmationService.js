@@ -38,6 +38,18 @@ const deleteConfirmation = async (confirmationData, token) => {
     return response.data
 }
 
+const updateConfirmation = async (id, confirmationData, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}` 
+        }
+    }
+
+    const response = await axios.put(`${API_URL}${id}`, confirmationData, config)
+
+    return response.data
+}
+
 const getConfirmationsByErrand = async (errandId, token) => {
     const config = {
         headers: {
@@ -54,7 +66,8 @@ const confirmationService = {
     createConfirmation,
     getConfirmationByErrandAndSolver,
     deleteConfirmation,
-    getConfirmationsByErrand
+    getConfirmationsByErrand,
+    updateConfirmation
 }
 
 export default confirmationService

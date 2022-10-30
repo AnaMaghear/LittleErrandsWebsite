@@ -6,7 +6,7 @@ const User = require("../models/userModel")
 const getErrands = asyncHandler(async (req, res) => {
     const errands = await Errands.find({ user: req.user.id})
     console.log(req.user.id);
-    res.status(200).json(errands)
+    res.status(200).json(errands.sort((e1, e2) => e1.createdAt > e2.createdAt ? -1 : 1))
 });
 
 const getErrandById = asyncHandler(async (req, res) => {
