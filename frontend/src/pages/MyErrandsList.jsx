@@ -3,9 +3,6 @@ import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { useSelector } from "react-redux"
 import { useState } from 'react'
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
 import errandService from '../features/errand/errandService'
 import ErrandItem from '../components/ErrandItem'
 
@@ -22,7 +19,7 @@ function MyErrandsList() {
         const loadErrands = async () => {
             await errandService
                 .getErrandsByUser(user.token)
-                .then(ernds => { console.log(ernds); ;setErrands(ernds)})
+                .then(ernds => setErrands(ernds))
         }
 
         loadErrands()

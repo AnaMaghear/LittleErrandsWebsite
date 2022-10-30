@@ -62,9 +62,22 @@ const getConfirmationsByErrand = async (errandId, token) => {
     return response.data
 }
 
+const getConfirmationsBySolver = async (token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}` 
+        }
+    }
+
+    const response = await axios.get(`${API_URL}bySolver`, config)
+    
+    return response.data
+}
+
 const confirmationService = {
     createConfirmation,
     getConfirmationByErrandAndSolver,
+    getConfirmationsBySolver,
     deleteConfirmation,
     getConfirmationsByErrand,
     updateConfirmation

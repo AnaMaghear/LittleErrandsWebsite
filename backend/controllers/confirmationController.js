@@ -118,9 +118,22 @@ const deleteConfirmation = asyncHandler(async(req,res) => {
     res.status(200).json({ id: req.params.id })
 })
 
+const getConfirmationsBySolver = asyncHandler(async(req, res) => {
+    console.log(req.user.id);
+    const solver = await User.findById(req.user.id)
+    if (!solver) {
+        res.status(400)
+        throw new Error("This user does not exist");
+    }
+
+    const confirmations = await Confirmation.find({solver: solver._id})
+    res.status(200).json(confirmations)
+})
+
 module.exports = {
     getConfirmationByErrand,
     getConfirmationByErrandAndSolver,
+    getConfirmationsBySolver,
     setConfirmation,
     updateConfirmation,
     deleteConfirmation

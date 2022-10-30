@@ -9,8 +9,6 @@ import { useNavigate } from 'react-router-dom';
 import {FaCheckSquare, FaWindowClose} from 'react-icons/fa'
 import confirmationService from '../features/confirmation/confirmationService';
 import ConfirmationStatus from '../enums/confirmationStatusEnum';
-import errandService from '../features/errand/errandService';
-import ErrandStatus from '../enums/errandStatusEnum';
 import { convertConfirmationStatus } from '../utils/enumConvert';
 
 function ConfirmationItem({confirmation, setRefresh, updateConfirmations}) {
