@@ -20,6 +20,9 @@ const confirmationSchema = mongoose.Schema({
         enum: ConfirmationStatus,
         require: true
     }
+},
+{
+    timestamps: true
 })
 
 module.exports = mongoose.model('Confirmation', confirmationSchema)
