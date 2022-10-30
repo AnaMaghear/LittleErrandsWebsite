@@ -245,6 +245,11 @@ input.search:focus {
   margin: 2rem;
 }
 
+.confirmation-card-container:hover {
+  cursor: pointer;
+  transform: scale(0.98);
+}
+
 .confirmation-content {
   display: flex;
   justify-content: space-between;
