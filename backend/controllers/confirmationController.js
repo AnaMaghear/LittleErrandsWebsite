@@ -4,6 +4,7 @@ const Confirmation = require("../models/confirmationModel")
 const User = require("../models/userModel");
 const ConfirmationStatus = require("../enums/confirmationStatusEnum");
 
+//for errand creator
 const getConfirmationByErrand = asyncHandler(async (req, res) => {
     const errandById = await Errands.findById(req.params.id)
 
@@ -22,13 +23,32 @@ const getConfirmationByErrand = asyncHandler(async (req, res) => {
     res.status(200).json(confirmationsByErrand)
 });
 
+//for errand solver
+const getConfirmationByErrandAndSolver = asyncHandler(async (req, res) => {
+    const errandById = await Errands.findById(req.params.id)
+
+    if (errandById === null) {
+        res.status(400)
+        throw new Error("Errand doesn't exist")
+    }
+
+    const confirmations = await Confirmation.find({ errand: req.params.id })
+    const confirmation = confirmations.filter(c => c.solver.toString() === req.user.id)
+
+    if (confirmation.length === 0) {
+        res.status(200).json([])
+    }
+
+    res.status(200).json(confirmation[0])
+})
+
 const setConfirmation = asyncHandler(async(req, res) => {
     // verify errand is not mine
     const errand = await Errands.findById(req.body.errandId)
 
     if (!errand) {
         res.status(400)
-        throw new Error("Errand doesn't exist")
+        throw new Error("Errand doesn't exist " + req.body.errandId)
     }
 
     if (errand.user.toString() === req.user.id) {
@@ -101,6 +121,7 @@ const deleteConfirmation = asyncHandler(async(req,res) => {
 
 module.exports = {
     getConfirmationByErrand,
+    getConfirmationByErrandAndSolver,
     setConfirmation,
     updateConfirmation,
     deleteConfirmation

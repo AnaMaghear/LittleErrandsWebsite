@@ -12,21 +12,49 @@ function Header() {
     dispatch(logout())
     dispatch(reset())
     navigate('/')
+  }
 
+  const gotoProfile = () => {
+    navigate('/profile')
+  }
+
+  const gotoCreateErrand = () => {
+    navigate('/createErrand')
+  }
+
+  const gotoErrands = () => {
+    navigate('/')
   }
 
   return (
     <header className='header'>
-        <div className='logo'>
-            <Link to = '/'>ErrandsSetter</Link>
+        <div className='logo-section'>
+            <div className='logo' onClick={gotoErrands}>
+                Errands
+            </div>
+            {
+                user ? (
+                    <button className="btn" onClick={gotoCreateErrand}>Create Errand</button>
+                ) : (
+                    <></>
+                )
+            }
+            
         </div>
         <ul>
             {user ? (
-                <li>
-                    <button className = 'btn' onClick = {onLogout}>
-                        <FaSignOutAlt/> Logout
-                    </button>
-                </li>
+                <>
+                    <li>
+                        <button className='btn' onClick={gotoProfile}>
+                            <FaUser/> Profile
+                        </button>
+                    </li>
+                    <li>
+                        <button className='btn' onClick={onLogout}>
+                            <FaSignOutAlt/> Logout
+                        </button>
+                    </li>
+                </>
             ) : (
               <>
                     <li>

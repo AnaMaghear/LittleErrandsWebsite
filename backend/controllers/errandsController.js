@@ -19,8 +19,8 @@ const getErrandById = asyncHandler(async (req, res) => {
     res.status(200).json(errand)
 })
 
-const getErrandsByLocation = asyncHandler(async (req, res) => {
-    const errands = await Errands.find({ location: req.params.loc.toLowerCase() })
+const getAllErrands = asyncHandler(async (req, res) => {
+    const errands = await Errands.find() 
     res.status(200).json(errands)
 })
 
@@ -97,7 +97,7 @@ const deleteErrands = asyncHandler(async (req, res) => {
 module.exports = {
     getErrands,
     getErrandById,
-    getErrandsByLocation,
+    getAllErrands,
     setErrands,
     updateErrands,
     deleteErrands
