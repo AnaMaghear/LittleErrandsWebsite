@@ -90,4 +90,41 @@ const getUserById = asyncHandler(async(req, res) => {
     res.status(200).json(user)
 })
 
-module.exports = { registerUser, loginUser, getMe, getUserById }
+const updateUser = asyncHandler(async(req, res) => {
+    const user = await User.findById(req.user.id)
+    if(!user) {
+        res.status(400)
+        throw new Error('User does not exist')
+    }
+
+    const password = req.body.password;
+    if (password === '') {
+        const updateUser = await User.findByIdAndUpdate(req.user.id, {
+            fullname: req.body.fullname,
+            username: req.body.username,
+            email: req.body.email,
+            phoneNumber: req.body.phoneNumber
+        }, {
+            new: true,
+        })
+    
+        res.status(200).json(updateUser)
+    }
+    
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt)
+
+    const updateUser = await User.findByIdAndUpdate(req.user.id, {
+        fullname: req.body.fullname,
+        username: req.body.username,
+        email: req.body.email,
+        phoneNumber: req.body.phoneNumber,
+        password: hashedPassword
+    }, {
+        new: true,
+    })
+
+    res.status(200).json(updateUser)
+})
+
+module.exports = { registerUser, loginUser, getMe, getUserById, updateUser }

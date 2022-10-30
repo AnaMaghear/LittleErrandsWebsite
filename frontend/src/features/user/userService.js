@@ -14,8 +14,22 @@ const getUserById = async (id, token) => {
     return response.data
 }
 
+const updateUser = async (updateUserData, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
+
+    const response = await axios.put(`${API_URL}`,updateUserData, config)
+
+    return response.data
+}
+
+
 const userService = {
-    getUserById
+    getUserById,
+    updateUser
 }
 
 export default userService

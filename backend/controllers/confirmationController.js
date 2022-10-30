@@ -15,8 +15,7 @@ const getConfirmationByErrand = asyncHandler(async (req, res) => {
 
     
     if (errandById.user.toString() !== req.user.id) {
-        res.status(400)
-        throw new Error("This is not your errand")
+        res.status(200).json([])
     }
 
     const confirmationsByErrand = await Confirmation.find({ errand: errandById.id })

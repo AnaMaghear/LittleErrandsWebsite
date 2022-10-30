@@ -38,10 +38,36 @@ const getErrandById = async (id, token) => {
     return response.data
 }
 
+const updateErrand = async (errandUpdateData, errandId, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
+
+    const response = await axios.put(`${API_URL}${errandId}`, errandUpdateData, config)
+
+    return response.data
+}
+
+const deleteErrand = async (errandId, token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
+
+    const response = await axios.delete(`${API_URL}${errandId}`, config)
+
+    return response.data
+}
+
 const errandService = {
     createErrand,
     getAllErrands,
-    getErrandById
+    getErrandById,
+    updateErrand,
+    deleteErrand
 }
 
 export default errandService
