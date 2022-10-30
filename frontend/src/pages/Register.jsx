@@ -35,7 +35,6 @@ useEffect (() =>{
   }
 
   dispatch(reset)
-
 }, [user, isError, isSuccess, message, navigate, dispatch])
 
 const onChange = (e) => {

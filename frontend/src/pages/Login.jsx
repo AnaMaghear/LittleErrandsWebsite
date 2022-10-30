@@ -22,7 +22,7 @@ function Login() {
 
     useEffect (() =>{
       if(isError){
-        toast.error(message)
+        toast.error(message, )
       }
     
       if(isSuccess || user){
@@ -33,28 +33,28 @@ function Login() {
     
     }, [user, isError, isSuccess, message, navigate, dispatch])
 
-const onChange = (e) => {
-  setFormData((prevState) => ({
-    ...prevState, 
-    [e.target.name]: e.target.value,
-  }))
-}
-
-const onSubmit = (e) => {
-  e.preventDefault()
-
-  const userData = {
-    email,
-    password
+  const onChange = (e) => {
+    setFormData((prevState) => ({
+      ...prevState, 
+      [e.target.name]: e.target.value,
+    }))
   }
 
-  dispatch(login(userData))
-}
+  const onSubmit = (e) => {
+    e.preventDefault()
+
+    const userData = {
+      email,
+      password
+    }
+
+    dispatch(login(userData))
+  }
 
 
-if(isLoading){
-  return (<Spinner/>)
-}
+  if(isLoading){
+    return (<Spinner/>)
+  }
 
   return (
     <>
