@@ -232,6 +232,11 @@ input.search:focus {
   min-height: 100%;
 }
 
+.errand-buttons-container {
+  display: flex;
+  
+}
+
 .loadingSpinnerContainer {
   position: fixed;
   top: 0;
