@@ -107,7 +107,7 @@ function Errand() {
 
   const onDelete = async () => {
     await errandService.deleteErrand(errand._id, user.token)
-    navigate('/profile')
+    navigate('/myErrands')
   }
 
   const loadContent = () => {
@@ -155,7 +155,7 @@ function Errand() {
               <div className="form-group">
                 <label>Reward</label>
                 <input
-                  type = "text" 
+                  type = "number" 
                   className = "form-control" 
                   id =  "reward" 
                   name = 'reward' 

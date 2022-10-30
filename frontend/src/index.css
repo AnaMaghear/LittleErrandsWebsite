@@ -237,6 +237,10 @@ input.search:focus {
   
 }
 
+.profile-buttons-container {
+  display: flex;
+}
+
 .loadingSpinnerContainer {
   position: fixed;
   top: 0;

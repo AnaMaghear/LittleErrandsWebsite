@@ -8,6 +8,8 @@ import Login from './pages/Login'
 import Register from './pages/Register' 
 import CreateErrand from './pages/CreateErrand'
 import Errand from './pages/Errand'
+import MyErrandsList from './pages/MyErrandsList'
+import MyEnrollmentsList from './pages/MyEnrollmentsList'
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
             <Route path='/profile' element={<Profile />} />
             <Route path='/createErrand' element={<CreateErrand />} />
             <Route path='/errand/:id' element={<Errand />} />
+            <Route path='/myErrands' element={<MyErrandsList />} />
+            <Route path='/myEnrollments' element={<MyEnrollmentsList />} />
           </Routes>
         </div>
       </Router>

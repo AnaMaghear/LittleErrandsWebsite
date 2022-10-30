@@ -5,6 +5,7 @@ const User = require("../models/userModel")
 
 const getErrands = asyncHandler(async (req, res) => {
     const errands = await Errands.find({ user: req.user.id})
+    console.log(req.user.id);
     res.status(200).json(errands)
 });
 
