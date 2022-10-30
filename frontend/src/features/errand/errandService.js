@@ -38,6 +38,18 @@ const getErrandById = async (id, token) => {
     return response.data
 }
 
+const getErrandsByUser = async (token) => {
+    const config = {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    }
+
+    const response = await axios.get(`${API_URL}me`, config)
+
+    return response.data
+}
+
 const updateErrand = async (errandUpdateData, errandId, token) => {
     const config = {
         headers: {
@@ -66,6 +78,7 @@ const errandService = {
     createErrand,
     getAllErrands,
     getErrandById,
+    getErrandsByUser,
     updateErrand,
     deleteErrand
 }

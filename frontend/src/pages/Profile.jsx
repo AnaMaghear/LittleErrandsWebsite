@@ -29,7 +29,6 @@ const Profile = () => {
     if (!user) {
       navigate('/login')
     }else{
-      console.log('piusi');
         const loadUser = async () => {
           setRefresh(false)
           setFormData({
@@ -158,13 +157,24 @@ const Profile = () => {
       )
   }
 
+  const gotoMyErrands = () => {
+    navigate('/myErrands')
+  }
+
+  const gotoMyEnrollments = () => {
+    navigate('/myEnrollments')
+  }
+
   const loadButtons = () => {
     return(
-      <div>
+      <div className="profile-buttons-container">
         <button className='btn' onClick={onUpdate}>Update</button>
+        <button className='btn' onClick={gotoMyErrands}>Errands</button>
+        <button className='btn' onClick={gotoMyEnrollments}>Enrollments</button>
       </div>
     )
   }
+
   return (
     <>
       Hello, { user.fullname }

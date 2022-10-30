@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { getUserById } from '../features/user/userSlice';
 import { useState } from 'react';
 import userService from '../features/user/userService';
+import { convertErrandStatus } from '../utils/enumConvert';
 
 function ErrandItem({errand}) {
   const navigate = useNavigate()
@@ -44,6 +45,9 @@ function ErrandItem({errand}) {
           </Typography>
           <Typography variant="body2">
             {errand.description.length > 100 ? errand.description.slice(0, 98) + "..." : errand.description}
+          </Typography>
+          <Typography variant="body2">
+            Status: {convertErrandStatus(errand.status)}
           </Typography>
         </CardContent>
       </Card>

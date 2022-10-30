@@ -237,6 +237,46 @@ input.search:focus {
   
 }
 
+.profile-buttons-container {
+  display: flex;
+}
+
+.confirmation-card-container {
+  margin: 2rem;
+}
+
+.confirmation-content {
+  display: flex;
+  justify-content: space-between;
+  text-align: left;
+  align-items: stretch;
+}
+
+.confirmation-buttons-container {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+}
+
+.confirmation-buttons-container #accept {
+  color: green;
+}
+
+.confirmation-buttons-container #reject {
+  color: rgb(190, 153, 30);
+}
+
+.confirmation-button {
+  border: 0;
+  background-color: #fff;
+  font-size: 30px;
+}
+
+.confirmation-button:hover {
+  transform: scale(0.98);
+  cursor: pointer;
+}
+
 .loadingSpinnerContainer {
   position: fixed;
   top: 0;

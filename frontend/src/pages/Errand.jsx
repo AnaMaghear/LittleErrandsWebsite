@@ -11,6 +11,9 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import confirmationService from '../features/confirmation/confirmationService'
 import {toast} from 'react-toastify'
+import ConfirmationItem from '../components/ConfirmationItem'
+import ConfirmationStatus from '../enums/confirmationStatusEnum'
+import ErrandStatus from '../enums/errandStatusEnum'
 
 function Errand() {
   const { id } = useParams()
@@ -34,7 +37,7 @@ function Errand() {
 
   const [isLoading, setIsLoading] = useState(true)
   const [solverConfirmation, setSolverConfirmation] = useState([])
-  const [errandConfirmations, setErrandConfirmations] = useState([]) //todo do not forget!!!!
+  const [errandConfirmations, setErrandConfirmations] = useState([])
   const [refresh, setRefresh] = useState(false)
 
   const [errandUpdateData, setFormData] = useState({
@@ -100,6 +103,21 @@ function Errand() {
     }))
   }
 
+  const updateConfirmations = async () => {
+    await confirmationService
+      .getConfirmationsByErrand(errand._id, user.token)
+      .then(async ec => {
+        ec.filter(c => c.confirmation === ConfirmationStatus.Pending)
+          .map(async c => 
+              await confirmationService
+                  .updateConfirmation(c._id, {confirmation: ConfirmationStatus.Declined}, user.token))
+
+          await errandService
+            .updateErrand({status: ErrandStatus.InProgress}, errand._id, user.token)
+      })
+      .then(() => setRefresh(true)) 
+  }
+
   const onUpdate = async (e) => {
     e.preventDefault()
     await errandService.updateErrand(errandUpdateData, errand._id, user.token)
@@ -107,7 +125,12 @@ function Errand() {
 
   const onDelete = async () => {
     await errandService.deleteErrand(errand._id, user.token)
-    navigate('/profile')
+    navigate('/myErrands')
+  }
+
+  const onDone = async () => {
+    await errandService.updateErrand({status: ErrandStatus.Done}, errand._id, user.token)
+      .then(() => setRefresh(true))
   }
 
   const loadContent = () => {
@@ -155,7 +178,7 @@ function Errand() {
               <div className="form-group">
                 <label>Reward</label>
                 <input
-                  type = "text" 
+                  type = "number" 
                   className = "form-control" 
                   id =  "reward" 
                   name = 'reward' 
@@ -185,26 +208,48 @@ function Errand() {
     }
   }
 
-  const loadButtons = () => {
-    if (errand.user === user._id) {
-      return (
+
+  const loadCreatorButtons = () => {
+    if(errand.status === ErrandStatus.New)
+      return(
         <div className='errand-buttons-container'> 
           <button className='btn' onClick={onUpdate}>Update</button>
           <button className='btn' onClick={onDelete}>Remove</button>
         </div>
       )
-    } else {
-      return (
-        solverConfirmation.length === 0 ? 
-        (<button className='btn' onClick={createConfirmation}>Enroll</button>) : 
-        (<button className='btn' onClick={deleteConfirmation}>Revoke</button>)
+    else if(errand.status === ErrandStatus.InProgress) {
+      return(
+        <div className='errand-buttons-container'> 
+          <button className='btn' onClick={onDone}>Done</button>
+        </div>
       )
+    }
+    else {
+      return(
+        <p>This errand is done</p>
+      )
+    }
+  }
+
+  const loadButtons = () => {
+    if (errand.user === user._id) {
+      loadCreatorButtons() 
+    } else if (solverConfirmation.length === 0) {
+        return (<button className='btn' onClick={createConfirmation}>Enroll</button>)
+    } else if (solverConfirmation.confirmation === ConfirmationStatus.Pending) {
+        return (<button className='btn' onClick={deleteConfirmation}>Revoke</button>)
+    } else if (solverConfirmation.confirmation === ConfirmationStatus.Declined) {
+      return (<p>You have been rejected and cannot enroll to this errand again</p>)
+    } else {
+      return (<p>You have been accepted</p>)
     }
   }
 
   const loadConfirmations = () => {
     return(
-      errandConfirmations.map((e) => <h2 key={e._id} >{e.confirmation}</h2>)
+      errandConfirmations
+        .filter(c => c.confirmation === ConfirmationStatus.Pending || c.confirmation === ConfirmationStatus.Accepted)
+        .map((c) => <ConfirmationItem key={c._id} confirmation={c} setRefresh={setRefresh} updateConfirmations={updateConfirmations} />)
     )
   }
 

@@ -91,7 +91,7 @@ function CreateErrandForm() {
           />
           <label htmlFor='reward'>Reward</label>
           <input
-            type='text'
+            type='number'
             name='reward'
             id='reward'
             value={errandData.reward}

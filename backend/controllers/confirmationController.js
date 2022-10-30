@@ -19,7 +19,7 @@ const getConfirmationByErrand = asyncHandler(async (req, res) => {
     }
 
     const confirmationsByErrand = await Confirmation.find({ errand: errandById.id })
-    res.status(200).json(confirmationsByErrand)
+    res.status(200).json(confirmationsByErrand.sort((c1, c2) => c1.createdAt > c2.createdAt ? -1 : 1))
 });
 
 //for errand solver
@@ -96,7 +96,7 @@ const updateConfirmation = asyncHandler(async(req,res) => {
         throw new Error("User not found");
     }
 
-    if(req.user.id !== user.id){
+    if(req.user.id !== user.id.toString()){
         res.status(400);
         throw new Error("This is not your confirmation");
     }
