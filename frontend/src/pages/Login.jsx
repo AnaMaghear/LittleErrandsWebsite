@@ -17,16 +17,16 @@ function Login() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  const {user, isLoading, isError, isSuccess, message} = useSelector(
+  const {user, isError, isSuccess, message} = useSelector(
     (state) => state.auth) 
 
     useEffect (() =>{
-      if(isError){
-        toast.error(message, )
-      }
-    
       if(isSuccess || user){
         navigate('/')
+      }
+
+      if(isError){
+        toast.error(message)
       }
     
       dispatch(reset)
@@ -49,11 +49,6 @@ function Login() {
     }
 
     dispatch(login(userData))
-  }
-
-
-  if(isLoading){
-    return (<Spinner/>)
   }
 
   return (

@@ -26,12 +26,12 @@ function Register() {
 
 
 useEffect (() =>{
-  if(isError){
-    toast.error(message)
-  }
-
   if(isSuccess || user){
     navigate('/')
+  }
+
+  if(isError){
+    toast.error(message)
   }
 
   dispatch(reset)

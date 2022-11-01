@@ -37,16 +37,16 @@ function ErrandItem({errand}) {
     <div className='card'>
       <Card id="cardcolor" onClick={gotoErrand}>
         <CardContent>
-          <Typography variant="h5" component="div">
+          <Typography id='typography' variant="h5" component="div">
           {errand.title.length > 25 ? errand.title.slice(0, 23) + "..." : errand.title}
           </Typography>
-          <Typography sx={{ mb: 1.5 }} color="text.secondary">
+          <Typography id='typography' sx={{ mb: 1.5 }} color="text.secondary">
             by { creator }
           </Typography>
-          <Typography variant="body2">
+          <Typography id='typography' variant="body2">
             {errand.description.length > 100 ? errand.description.slice(0, 98) + "..." : errand.description}
           </Typography>
-          <Typography variant="body2">
+          <Typography id='typography' variant="body2">
             Status: {convertErrandStatus(errand.status)}
           </Typography>
         </CardContent>

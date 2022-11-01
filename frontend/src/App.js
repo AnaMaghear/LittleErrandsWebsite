@@ -10,10 +10,16 @@ import CreateErrand from './pages/CreateErrand'
 import Errand from './pages/Errand'
 import MyErrandsList from './pages/MyErrandsList'
 import MyEnrollmentsList from './pages/MyEnrollmentsList'
+import { Helmet } from 'react-helmet'
+
+const TITLE = "LittleErrands"
 
 function App() {
   return (
     <>
+      <Helmet>
+          <title>{TITLE}</title>
+      </Helmet>    
       <Router>
         <div className='container'>
           <Header />

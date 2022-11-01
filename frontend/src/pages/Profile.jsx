@@ -7,6 +7,7 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import {toast} from 'react-toastify'
 import userService from "../features/user/userService";
+import Spinner from "../components/Spinner"
 
 const Profile = () => {
   const navigate = useNavigate()
@@ -24,6 +25,7 @@ const Profile = () => {
 
   const {fullname, username, email, phoneNumber, password, password2} = formData
   const [refresh, setRefresh] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     if (!user) {
@@ -48,6 +50,7 @@ const Profile = () => {
                 username: usr.username,
                 email: usr.email,
                 phoneNumber: usr.phoneNumber}))
+              setIsLoading(false)
             })
         }
 
@@ -70,7 +73,7 @@ const Profile = () => {
     }
     else{
       await userService.updateUser(formData, user.token)
-        .then(() => setRefresh(true))
+        .then(() => { setIsLoading(true); setRefresh(true)})
     }
   }
 
@@ -169,23 +172,39 @@ const Profile = () => {
     return(
       <div className="profile-buttons-container">
         <button className='btn' onClick={onUpdate}>Update</button>
-        <button className='btn' onClick={gotoMyErrands}>Errands</button>
         <button className='btn' onClick={gotoMyEnrollments}>Enrollments</button>
+        <button className='btn' onClick={gotoMyErrands}>Errands</button>
       </div>
     )
   }
 
-  return (
-    <>
-      Hello, { user.fullname }
-      <div>
+  const load = () => {
+    if (isLoading) {
+      return (
+        <Spinner />
+      )
+    } else {
+      return (
+        <div>
           <Card>
+            <CardContent>
+            <Typography variant="h3" component="div" fontFamily={"Times New Roman"}>
+              Hello, { user.fullname }
+            </Typography>
+            </CardContent>
             <CardContent>
               { loadContent() }
               { loadButtons() }
             </CardContent> 
           </Card>
         </div>
+      )
+    }
+  }
+
+  return (
+    <>
+        { load() }
     </>
   )
 }
