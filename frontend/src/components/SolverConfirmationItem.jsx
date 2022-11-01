@@ -43,16 +43,21 @@ function SolverConfirmationItem({confirmation}) {
     <div className='confirmation-card-container'>
       <Card onClick={gotoErrand}>
         <CardContent className='confirmation-content'>
-          <div>
-            <Typography variant="h5" component="div">
+          <div className='confirmation-content-part'>
+            <Typography id="typography" variant="h5" component="div">
                 Title: {errand.title}
             </Typography>
-            <Typography sx={{ mb: 1.5 }} color="text.secondary">
+            <Typography id="typography" sx={{ mb: 1.5 }} color="text.secondary">
                 by {creator.username}
             </Typography>
-            <Typography variant="body2">
+            <Typography id="typography" variant="body2">
                 Status: { convertConfirmationStatus(confirmation.confirmation)}
             </Typography>   
+          </div>
+          <div className='confirmation-content-part'>
+            <Typography id="typography" variant="body2">
+              {errand.description?.length > 200 ? errand.description.slice(0, 198) + "..." : errand.description}
+            </Typography>
           </div>
         </CardContent>
       </Card>
