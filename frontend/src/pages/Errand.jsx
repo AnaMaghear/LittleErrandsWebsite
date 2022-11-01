@@ -14,6 +14,7 @@ import {toast} from 'react-toastify'
 import ConfirmationItem from '../components/ConfirmationItem'
 import ConfirmationStatus from '../enums/confirmationStatusEnum'
 import ErrandStatus from '../enums/errandStatusEnum'
+import EnrollmentsSkeleton from '../components/EnrollmentsSkeleton'
 
 function Errand() {
   const { id } = useParams()
@@ -74,9 +75,9 @@ function Errand() {
               .getUserById(ernd.user, user.token)
               .then(crtr => {
                 setCreator(crtr)
-                setIsLoading(false)
               })
-        })
+          })
+          .then(() => setIsLoading(false))
       }
 
       load()
@@ -86,14 +87,13 @@ function Errand() {
   const createConfirmation = async () => {
     await confirmationService
       .createConfirmation({ errandId: errand._id }, user.token)
-      .then(() => setRefresh(true))
-      // .catch((err) => { toast.error(err.response.data.message)})
-}
+      .then(() => { setIsLoading(true); setRefresh(true)})
+  }
 
   const deleteConfirmation = async () => {
     await confirmationService
       .deleteConfirmation(solverConfirmation._id, user.token)
-      .then(() => setRefresh(true))
+      .then(() => { setIsLoading(true); setRefresh(true)})
   }
 
   const onChange = (e) => {
@@ -208,24 +208,23 @@ function Errand() {
     }
   }
 
-
   const loadCreatorButtons = () => {
-    if(errand.status === ErrandStatus.New)
-      return(
+    if(errand.status === ErrandStatus.New){
+      return (
         <div className='errand-buttons-container'> 
           <button className='btn' onClick={onUpdate}>Update</button>
           <button className='btn' onClick={onDelete}>Remove</button>
         </div>
       )
-    else if(errand.status === ErrandStatus.InProgress) {
-      return(
+    }else if(errand.status === ErrandStatus.InProgress) {
+      return (
         <div className='errand-buttons-container'> 
           <button className='btn' onClick={onDone}>Done</button>
         </div>
       )
     }
     else {
-      return(
+      return (
         <p>This errand is done</p>
       )
     }
@@ -233,7 +232,7 @@ function Errand() {
 
   const loadButtons = () => {
     if (errand.user === user._id) {
-      loadCreatorButtons() 
+      return loadCreatorButtons() 
     } else if (solverConfirmation.length === 0) {
         return (<button className='btn' onClick={createConfirmation}>Enroll</button>)
     } else if (solverConfirmation.confirmation === ConfirmationStatus.Pending) {
@@ -257,7 +256,7 @@ function Errand() {
     if (isLoading) {
       return (
         <div>
-          Loading...
+          <EnrollmentsSkeleton />
         </div>
       )
     } else {
@@ -269,6 +268,7 @@ function Errand() {
               { loadButtons() }
             </CardContent> 
           </Card>
+          { errand.user === user._id ? loadConfirmations() : <></> }
         </div>
       )
     }
@@ -277,7 +277,6 @@ function Errand() {
   return (
     <>
       { loading() }
-      { errand.user === user._id ? loadConfirmations() : <></> }
     </>
   )
 }

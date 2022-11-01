@@ -5,12 +5,14 @@ import { useSelector } from "react-redux"
 import { useState } from 'react'
 import errandService from '../features/errand/errandService'
 import ErrandItem from '../components/ErrandItem'
+import ErrandSkeleton from '../components/ErrandSkeleton'
 
 function MyErrandsList() {
   const navigate = useNavigate()
 
   const { user } = useSelector((state) => state.auth)
   const [errands, setErrands] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     if (!user) {
@@ -19,7 +21,7 @@ function MyErrandsList() {
         const loadErrands = async () => {
             await errandService
                 .getErrandsByUser(user.token)
-                .then(ernds => setErrands(ernds))
+                .then(ernds => {setErrands(ernds); setIsLoading(false)})
         }
 
         loadErrands()
@@ -38,8 +40,24 @@ function MyErrandsList() {
       )
   }
 
+  const loadSkeleton = () => {
+    return (
+      <div>
+        <ErrandSkeleton />
+      </div>
+    )
+  }
+
+  const load = () => {
+    if (isLoading) {
+      return loadSkeleton()
+    } else {
+      return loadContent()
+    }
+  }
+
   return (
-    <>{ loadContent() }</>
+    <>{ load() }</>
   )
 }
 

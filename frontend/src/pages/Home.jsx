@@ -5,6 +5,7 @@ import ErrandItem from '../components/ErrandItem'
 import { useState } from "react"
 import ErrandStatus from "../enums/errandStatusEnum"
 import errandService from "../features/errand/errandService"
+import ErrandSkeleton from "../components/ErrandSkeleton"
 
 const Home = () => {
   const navigate = useNavigate()
@@ -13,6 +14,7 @@ const Home = () => {
 
   const [location, setLocation] = useState('')
   const [errands, setErrands] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
   const handleInput = (e) => {
     setLocation(e.target.value)
   }
@@ -22,10 +24,12 @@ const Home = () => {
       navigate('/login')
     } else {
       setErrands([])
-
       const loadErrands = async () => {
-        let loadedErrands = await errandService.getAllErrands(user.token)
-        setErrands(loadedErrands)
+        await errandService.getAllErrands(user.token)
+          .then((ernds) => {         
+            setErrands(ernds);           
+            setIsLoading(false)
+          })
       }
       
       loadErrands()
@@ -45,17 +49,31 @@ const Home = () => {
   }
 
   const loadErrands = () => {
-    filteredErrands = filterErrand()
-    console.log(filteredErrands.length);
+      filteredErrands = filterErrand()
+      return (
+        <div className="errands-list">
+              { filteredErrands.length > 0 ? 
+                filteredErrands.map((e) => (<ErrandItem key={e._id} errand={e} />)) : 
+                (<h3>There are no errands available</h3>) 
+              }
+        </div>
+      )
+  }
+
+  const loadSkeleton = () => {
     return (
-      <div className="errands-list">
-          { 
-            filteredErrands.length > 0 ? 
-              filteredErrands.map((e) => (<ErrandItem key={e._id} errand={e} />)) : 
-              (<h3>There are no errands available</h3>)
-          }
+      <div>
+        <ErrandSkeleton />
       </div>
     )
+  }
+
+  const load = () => {
+    if (isLoading) {
+      return loadSkeleton()
+    } else {
+      return loadErrands()
+    }
   }
 
   return (
@@ -69,7 +87,7 @@ const Home = () => {
         value={location}
         onChange={handleInput} />
       <div className="errands-list-container">
-        { loadErrands() }
+        { load() }
       </div>
     </>
   )

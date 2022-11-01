@@ -34,13 +34,15 @@ function Header() {
             </div>
             {
                 user ? (
-                    <button className="btn" onClick={gotoCreateErrand}>Create Errand</button>
+                    <>
+                        <button className="btn" onClick={gotoCreateErrand}>Create Errand</button>
+                    </>
                 ) : (
                     <></>
                 )
             }
-            
         </div>
+        <h1 className='title-container'> Little Errands </h1>
         <ul>
             {user ? (
                 <>
